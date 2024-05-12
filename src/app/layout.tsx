@@ -2,6 +2,7 @@ import './globals.css'
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner'
 
 import MuiThemeRegistry from '@/components/theme/registry'
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          <Toaster richColors position="top-right" />
           <MuiThemeRegistry>{children}</MuiThemeRegistry>
         </AppRouterCacheProvider>
       </body>

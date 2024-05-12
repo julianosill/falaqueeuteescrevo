@@ -5,6 +5,7 @@ import { Logo } from '@/components/logo'
 import { MainCard } from '@/components/main-card'
 import { Status } from '@/components/status'
 import { ThemeToggle } from '@/components/theme/toggle'
+import { Transcription } from '@/components/transcription'
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <Logo style={{ width: '100%' }} />
         <Form />
         <Status />
+        <Transcription />
       </MainCard>
 
       <ThemeToggle />
