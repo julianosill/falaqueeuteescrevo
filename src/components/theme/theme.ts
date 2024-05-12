@@ -31,5 +31,18 @@ export const createMuiTheme = () =>
           },
         },
       },
+      MuiLinearProgress: {
+        styleOverrides: {
+          root: {
+            height: 6,
+            width: '100%',
+            backgroundColor: 'var(--mui-palette-divider)',
+            borderRadius: 9999,
+          },
+          bar1Determinate: { borderRadius: 9999 },
+          bar1Indeterminate: { borderRadius: 9999 },
+          bar2Indeterminate: { borderRadius: 9999 },
+        },
+      },
     },
   })

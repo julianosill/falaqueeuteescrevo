@@ -3,6 +3,7 @@ import { Container } from '@mui/material'
 import { Form } from '@/components/form'
 import { Logo } from '@/components/logo'
 import { MainCard } from '@/components/main-card'
+import { Status } from '@/components/status'
 import { ThemeToggle } from '@/components/theme/toggle'
 
 export default function Home() {
@@ -20,7 +21,9 @@ export default function Home() {
       <MainCard>
         <Logo style={{ width: '100%' }} />
         <Form />
+        <Status />
       </MainCard>
+
       <ThemeToggle />
     </Container>
   )
