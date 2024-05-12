@@ -1,5 +1,7 @@
-import { Button, Container } from '@mui/material'
+import { Container } from '@mui/material'
 
+import { Logo } from '@/components/logo'
+import { MainCard } from '@/components/main-card'
 import { ThemeToggle } from '@/components/theme/toggle'
 
 export default function Home() {
@@ -12,10 +14,11 @@ export default function Home() {
         gap: 2,
         justifyContent: 'center',
         minHeight: '100vh',
-        padding: 2,
       }}
     >
-      <Button variant="contained">Button</Button>
+      <MainCard>
+        <Logo style={{ width: '100%' }} />
+      </MainCard>
       <ThemeToggle />
     </Container>
   )
