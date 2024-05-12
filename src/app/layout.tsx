@@ -1,4 +1,9 @@
+import './globals.css'
+
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import type { Metadata } from 'next'
+
+import MuiThemeRegistry from '@/components/theme/registry'
 
 export const metadata: Metadata = {
   title: 'Fala que eu te escrevo',
@@ -11,8 +16,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
-      <body>{children}</body>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body>
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          <MuiThemeRegistry>{children}</MuiThemeRegistry>
+        </AppRouterCacheProvider>
+      </body>
     </html>
   )
 }
