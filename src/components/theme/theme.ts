@@ -16,4 +16,20 @@ export const createMuiTheme = () =>
     shape: {
       borderRadius: 6,
     },
+    components: {
+      MuiSelect: {
+        styleOverrides: {
+          root: {
+            fontSize: '0.875rem',
+          },
+        },
+      },
+      MuiMenuItem: {
+        styleOverrides: {
+          root: {
+            fontSize: '0.875rem',
+          },
+        },
+      },
+    },
   })
