@@ -1,7 +1,19 @@
 'use client'
 
-import { CloudUploadOutlined, GraphicEq } from '@mui/icons-material'
+import {
+  AudioFileOutlined,
+  CloudUploadOutlined,
+  GraphicEq,
+} from '@mui/icons-material'
 import { Button, Stack, styled, Tooltip, Typography } from '@mui/material'
+import { type ChangeEvent, type FormEvent, useState } from 'react'
+import { toast } from 'sonner'
+
+import { useAppDispatch, useAppSelector } from '@/store'
+import { updateResult, updateStatus } from '@/store/slices/transcription'
+import { convertFileToWav } from '@/utils/convert-file-to-wav'
+import { VALID_TYPES } from '@/utils/valid-file-types'
+import { validateFile } from '@/utils/validate-file'
 
 import { Language } from './language'
 
@@ -18,26 +30,69 @@ export const HiddenInput = styled('input')({
 })
 
 export function Form() {
+  const [file, setFile] = useState<File | null>(null)
+
+  const status = useAppSelector((state) => state.transcription.status)
+  const dispatch = useAppDispatch()
+
+  const isSubmitDisabled = !file || (status !== null && status !== 'done')
+  const fileSize = file ? (file.size / 1024 / 1024).toFixed(1) + 'mb' : null
+
+  function handleFileSelected(e: ChangeEvent<HTMLInputElement>) {
+    const { files } = e.currentTarget
+    if (!files || files.length === 0) return
+    const selectedFile = files[0]
+
+    if (!VALID_TYPES.includes(selectedFile.type)) {
+      setFile(null)
+      return toast.warning(
+        'Arquivo inválido. Por favor, selecione um arquivo de áudio ou vídeo.',
+      )
+    }
+
+    setFile(selectedFile)
+  }
+
+  async function handleTranscription(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!file) return
+    dispatch(updateResult(''))
+
+    const validation = await validateFile(file)
+    if (!validation.success) {
+      setFile(null)
+      dispatch(updateStatus(null))
+      return toast.warning(validation.message)
+    }
+
+    const audioFile = await convertFileToWav(file)
+    const formData = new FormData()
+    formData.append('audioFile', audioFile)
+  }
+
   return (
     <>
-      <Typography
-        variant="body2"
-        sx={{ color: 'text.secondary', marginTop: 6, textAlign: 'center' }}
-      >
-        Selecione um arquivo de áudio ou vídeo, de até 10 minutos, e inicie sua
-        transcrição.
-      </Typography>
+      {!status && (
+        <Typography
+          variant="body2"
+          sx={{ color: 'text.secondary', marginTop: 6, textAlign: 'center' }}
+        >
+          Selecione um arquivo de áudio ou vídeo, de até 10 minutos, e inicie
+          sua transcrição.
+        </Typography>
+      )}
 
       <Stack
         component="form"
         sx={{
           flexDirection: 'row',
           gap: 1.5,
-          marginTop: 4,
+          marginTop: status ? 6 : 4,
           width: '100%',
         }}
+        onSubmit={handleTranscription}
       >
-        <Tooltip title="title" placement="top">
+        <Tooltip title={file ? file.name : null} placement="top">
           <Button
             component="label"
             variant="outlined"
@@ -48,7 +103,13 @@ export function Form() {
               textTransform: 'none',
             }}
             tabIndex={-1}
-            startIcon={<CloudUploadOutlined sx={{ color: 'primary.light' }} />}
+            startIcon={
+              file ? (
+                <AudioFileOutlined sx={{ color: 'primary.light' }} />
+              ) : (
+                <CloudUploadOutlined sx={{ color: 'primary.light' }} />
+              )
+            }
           >
             <Typography
               sx={{
@@ -57,31 +118,40 @@ export function Form() {
                 whiteSpace: 'nowrap',
               }}
             >
-              Selecionar arquivo
+              {file ? file.name : 'Selecionar arquivo'}
             </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: 'text.disabled', lineHeight: 1, marginLeft: 0.5 }}
-            >
-              10mb
-            </Typography>
-            <HiddenInput type="file" />
+            {fileSize && (
+              <Typography
+                variant="body2"
+                sx={{ color: 'text.disabled', lineHeight: 1, marginLeft: 0.5 }}
+              >
+                {fileSize}
+              </Typography>
+            )}
+            <HiddenInput type="file" onChange={handleFileSelected} />
           </Button>
         </Tooltip>
 
-        <Language />
+        {file && <Language />}
 
-        <Button type="submit" variant="contained" startIcon={<GraphicEq />}>
+        <Button
+          type="submit"
+          variant="contained"
+          startIcon={<GraphicEq />}
+          disabled={isSubmitDisabled}
+        >
           Transcrever
         </Button>
       </Stack>
 
-      <Typography
-        variant="body2"
-        sx={{ color: 'text.disabled', marginTop: 1, textAlign: 'center' }}
-      >
-        Arquivos suportados: mp3, wav, aac, oog, mp4, avi, webm
-      </Typography>
+      {!file && (
+        <Typography
+          variant="body2"
+          sx={{ color: 'text.disabled', marginTop: 1, textAlign: 'center' }}
+        >
+          Arquivos suportados: mp3, wav, aac, oog, mp4, avi, webm
+        </Typography>
+      )}
     </>
   )
 }
