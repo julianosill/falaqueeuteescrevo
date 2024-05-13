@@ -5,14 +5,17 @@ import { Button, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-const transcription = 'Lorem ipsum dolor sit amet.'
+import { useAppSelector } from '@/store'
 
 export function Transcription() {
   const [isClipboardSupported, setIsClipboardSupported] = useState(false)
 
+  const transcription = useAppSelector((state) => state.transcription.result)
+
   const showCopyButton = isClipboardSupported
 
   async function handleCopyToClipboard() {
+    if (!transcription) return null
     try {
       await navigator.clipboard.writeText(transcription)
       toast.success('Transcrição copiada para área de transferência.')
@@ -25,6 +28,8 @@ export function Transcription() {
   useEffect(() => {
     setIsClipboardSupported('clipboard' in navigator)
   }, [])
+
+  if (!transcription) return null
 
   return (
     <Stack

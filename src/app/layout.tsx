@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
 
 import MuiThemeRegistry from '@/components/theme/registry'
+import { StoreProvider } from '@/store/store-provider'
 
 export const metadata: Metadata = {
   title: 'Fala que eu te escrevo',
@@ -21,7 +22,9 @@ export default function RootLayout({
       <body>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <Toaster richColors position="top-right" />
-          <MuiThemeRegistry>{children}</MuiThemeRegistry>
+          <MuiThemeRegistry>
+            <StoreProvider>{children}</StoreProvider>
+          </MuiThemeRegistry>
         </AppRouterCacheProvider>
       </body>
     </html>

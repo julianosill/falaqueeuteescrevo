@@ -1,4 +1,13 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  type SelectChangeEvent,
+} from '@mui/material'
+import { useDispatch } from 'react-redux'
+
+import { updateLanguage } from '@/store/slices/transcription'
 
 const options = [
   { value: 'de-DE', language: 'Alemão (DE)' },
@@ -14,10 +23,21 @@ const options = [
 ]
 
 export function Language() {
+  const dispatch = useDispatch()
+
+  function handleLanguageChange(e: SelectChangeEvent) {
+    dispatch(updateLanguage(e.target.value))
+  }
+
   return (
     <FormControl size="small">
       <InputLabel id="language-label">Idioma</InputLabel>
-      <Select label="Idioma" labelId="language-label" defaultValue="pt-BR">
+      <Select
+        label="Idioma"
+        labelId="language-label"
+        defaultValue="pt-BR"
+        onChange={handleLanguageChange}
+      >
         {options.map(({ value, language }) => (
           <MenuItem key={value} value={value}>
             {language}
