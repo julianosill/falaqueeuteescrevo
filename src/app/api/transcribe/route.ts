@@ -2,6 +2,8 @@ import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 
 import { env } from '@/env'
 
+export const maxDuration = 60
+
 export async function POST(request: Request) {
   const formData = await request.formData()
   const audioFile = formData.get('audioFile') as File
