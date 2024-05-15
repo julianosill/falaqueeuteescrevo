@@ -9,6 +9,7 @@ import { Button, Stack, styled, Tooltip, Typography } from '@mui/material'
 import { type ChangeEvent, type FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 
+import { api } from '@/libs/api'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { updateResult, updateStatus } from '@/store/slices/transcription'
 import { convertFileToWav } from '@/utils/convert-file-to-wav'
@@ -32,6 +33,7 @@ export const HiddenInput = styled('input')({
 export function Form() {
   const [file, setFile] = useState<File | null>(null)
 
+  const language = useAppSelector((state) => state.transcription.language)
   const status = useAppSelector((state) => state.transcription.status)
   const dispatch = useAppDispatch()
 
@@ -58,16 +60,39 @@ export function Form() {
     if (!file) return
     dispatch(updateResult(''))
 
-    const validation = await validateFile(file)
-    if (!validation.success) {
+    const fileValidation = await validateFile(file)
+    if (!fileValidation.success) {
       setFile(null)
       dispatch(updateStatus(null))
-      return toast.warning(validation.message)
+      return toast.warning(fileValidation.message)
     }
 
     const audioFile = await convertFileToWav(file)
     const formData = new FormData()
     formData.append('audioFile', audioFile)
+
+    try {
+      dispatch(updateStatus('transcribing'))
+      const response = await api(`/transcribe?lang=${language}`, {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        dispatch(updateStatus(null))
+        toast.error('A transcrição falhou!')
+        const error = await response.json()
+        return console.error(error)
+      }
+
+      const result = await response.json()
+      dispatch(updateResult(result.transcription))
+      dispatch(updateStatus('done'))
+    } catch (error) {
+      toast.error('Não foi possível iniciar a transcrição. Tente novamente.')
+      console.error('Error during transcription:\n', error)
+      dispatch(updateStatus(null))
+    }
   }
 
   return (
