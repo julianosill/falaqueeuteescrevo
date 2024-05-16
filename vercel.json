@@ -1,0 +1,13 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "default": false,
+      "main": true
+    }
+  },
+  "functions": {
+    "api/transcribe/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}
