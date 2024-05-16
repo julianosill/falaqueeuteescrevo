@@ -6,7 +6,7 @@
     }
   },
   "functions": {
-    "api/transcribe": {
+    "api/transcribe/*.ts": {
       "maxDuration": 60
     }
   }
