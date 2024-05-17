@@ -34,7 +34,7 @@ export function Transcription() {
   return (
     <Stack
       sx={{
-        alignItems: 'center',
+        alignItems: 'start',
         marginTop: 6,
         width: '100%',
         borderColor: 'divider',
@@ -45,29 +45,22 @@ export function Transcription() {
         paddingTop: showCopyButton ? null : 4,
       }}
     >
+      <Typography>{transcription}</Typography>
       {showCopyButton && (
         <Button
           size="small"
           variant="outlined"
           startIcon={<CopyAll />}
           sx={{
-            backgroundColor: 'background.paper',
-            borderRadius: 2,
-            height: 28,
-            marginBottom: 3,
-            marginTop: -5,
-            paddingInline: 1.5,
-            paddingTop: 0.7,
-            '&:hover': {
-              backgroundColor: 'background.default',
-            },
+            marginTop: 3,
+            paddingTop: 0.3,
+            paddingBottom: 0.2,
           }}
           onClick={handleCopyToClipboard}
         >
-          Copiar transcrição
+          Copiar
         </Button>
       )}
-      <Typography>{transcription}</Typography>
     </Stack>
   )
 }

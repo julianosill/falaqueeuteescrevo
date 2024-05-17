@@ -17,6 +17,7 @@ export default function Home() {
         gap: 2,
         justifyContent: 'center',
         minHeight: '100vh',
+        padding: 2,
       }}
     >
       <MainCard>
