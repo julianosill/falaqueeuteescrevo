@@ -8,7 +8,7 @@
   },
   "functions": {
     "app/api/transcribe/*.ts": {
-      "maxDuration": 60
+      "maxDuration": 10
     }
   }
 }

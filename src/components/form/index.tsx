@@ -9,6 +9,7 @@ import { Button, Stack, styled, Tooltip, Typography } from '@mui/material'
 import { type ChangeEvent, type FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 
+import { env } from '@/env'
 import { api } from '@/libs/api'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { updateResult, updateStatus } from '@/store/slices/transcription'
@@ -39,6 +40,7 @@ export function Form() {
 
   const isSubmitDisabled = !file || (status !== null && status !== 'done')
   const fileSize = file ? (file.size / 1024 / 1024).toFixed(1) + 'mb' : null
+  const MAX_DURATION_MINUTES = env.NEXT_PUBLIC_MAX_DURATION_IN_MIN
 
   function handleFileSelected(e: ChangeEvent<HTMLInputElement>) {
     const { files } = e.currentTarget
@@ -102,8 +104,8 @@ export function Form() {
           variant="body2"
           sx={{ color: 'text.secondary', marginTop: 6, textAlign: 'center' }}
         >
-          Selecione um arquivo de áudio ou vídeo, de até 10 minutos, e inicie
-          sua transcrição.
+          Selecione um arquivo de áudio ou vídeo, de até {MAX_DURATION_MINUTES}{' '}
+          minutos, e inicie sua transcrição.
         </Typography>
       )}
 
