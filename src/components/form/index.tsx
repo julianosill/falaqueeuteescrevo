@@ -9,6 +9,7 @@ import { Button, Stack, styled, Tooltip, Typography } from '@mui/material'
 import { type ChangeEvent, type FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 
+import { env } from '@/env'
 import { api } from '@/libs/api'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { updateResult, updateStatus } from '@/store/slices/transcription'
@@ -18,7 +19,9 @@ import { validateFile } from '@/utils/validate-file'
 
 import { Language } from './language'
 
-export const HiddenInput = styled('input')({
+let transcriptionAttempts = 0
+
+const HiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
   height: 1,
@@ -39,6 +42,7 @@ export function Form() {
 
   const isSubmitDisabled = !file || (status !== null && status !== 'done')
   const fileSize = file ? (file.size / 1024 / 1024).toFixed(1) + 'mb' : null
+  const MAX_DURATION_MINUTES = env.NEXT_PUBLIC_MAX_DURATION_IN_MIN
 
   function handleFileSelected(e: ChangeEvent<HTMLInputElement>) {
     const { files } = e.currentTarget
@@ -47,9 +51,8 @@ export function Form() {
 
     if (!VALID_TYPES.includes(selectedFile.type)) {
       setFile(null)
-      return toast.warning(
-        'Arquivo inválido. Por favor, selecione um arquivo de áudio ou vídeo.',
-      )
+      toast.warning('Arquivo inválido, selecione um arquivo de áudio ou vídeo.')
+      return
     }
 
     setFile(selectedFile)
@@ -58,13 +61,14 @@ export function Form() {
   async function handleTranscription(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!file) return
-    dispatch(updateResult(''))
+    dispatch(updateResult(null))
 
     const fileValidation = await validateFile(file)
     if (!fileValidation.success) {
       setFile(null)
       dispatch(updateStatus(null))
-      return toast.warning(fileValidation.message)
+      toast.warning(fileValidation.message)
+      return
     }
 
     const audioFile = await convertFileToWav(file)
@@ -79,19 +83,38 @@ export function Form() {
       })
 
       if (!response.ok) {
+        transcriptionAttempts++
         dispatch(updateStatus(null))
-        toast.error('A transcrição falhou!')
+
         const error = await response.json()
-        return console.error(error)
+        console.error(error)
+
+        if (transcriptionAttempts > 3) {
+          return toast.error(
+            'Erro na transcrição. Por favor, entre em contato com o administrador do projeto.',
+            { duration: 6000 },
+          )
+        }
+
+        if (response.status === 504) {
+          return toast.error(
+            'O tempo de transcrição ultrapassou o limite. Por favor, envie um arquivo com duração menor.',
+            { duration: 6000 },
+          )
+        }
+
+        return toast.error('A transcrição falhou. Por favor, tente novamente.')
       }
 
       const result = await response.json()
       dispatch(updateResult(result.transcription))
       dispatch(updateStatus('done'))
+      transcriptionAttempts = 0
     } catch (error) {
       toast.error('Não foi possível iniciar a transcrição. Tente novamente.')
       console.error('Error during transcription:\n', error)
       dispatch(updateStatus(null))
+      transcriptionAttempts++
     }
   }
 
@@ -102,8 +125,8 @@ export function Form() {
           variant="body2"
           sx={{ color: 'text.secondary', marginTop: 6, textAlign: 'center' }}
         >
-          Selecione um arquivo de áudio ou vídeo, de até 10 minutos, e inicie
-          sua transcrição.
+          Selecione um arquivo de áudio ou vídeo, de até {MAX_DURATION_MINUTES}{' '}
+          minutos, e inicie sua transcrição.
         </Typography>
       )}
 

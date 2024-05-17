@@ -34,7 +34,7 @@ export const transcriptionSlice = createSlice({
     updateProgress: (state, action: PayloadAction<number>) => {
       state.progress = action.payload
     },
-    updateResult: (state, action: PayloadAction<string>) => {
+    updateResult: (state, action: PayloadAction<string | null>) => {
       state.result = action.payload
     },
   },
