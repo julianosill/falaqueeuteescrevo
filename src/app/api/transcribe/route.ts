@@ -8,14 +8,6 @@ export async function POST(request: Request) {
   const { searchParams } = new URL(request.url)
   const language = searchParams.get('lang')
 
-  await new Promise((resolve) => setTimeout(resolve, 60 * 1000))
-
-  const timeout = true
-
-  if (timeout) {
-    return Response.json({ message: 'Invalid file type.' }, { status: 400 })
-  }
-
   if (audioFile.type !== 'audio/wav') {
     return Response.json({ message: 'Invalid file type.' }, { status: 400 })
   }
