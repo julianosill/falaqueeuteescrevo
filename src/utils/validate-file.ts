@@ -1,9 +1,7 @@
+import { env } from '@/env'
+
 import { getFileDuration } from './get-file-duration'
-import {
-  MAX_DURATION_MINUTES,
-  MAX_FILE_SIZE_MB,
-  VALID_TYPES,
-} from './valid-file-types'
+import { VALID_TYPES } from './valid-file-types'
 
 interface ValidateFile {
   success: boolean
@@ -11,6 +9,9 @@ interface ValidateFile {
 }
 
 export async function validateFile(file: File): Promise<ValidateFile> {
+  const MAX_FILE_SIZE_MB = env.NEXT_PUBLIC_MAX_SIZE_IN_MB
+  const MAX_DURATION_MINUTES = env.NEXT_PUBLIC_MAX_DURATION_IN_MIN
+
   if (!VALID_TYPES.includes(file.type)) {
     return { success: false, message: 'Formato de arquivo inválido.' }
   }

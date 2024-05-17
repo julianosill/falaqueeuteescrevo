@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     return Response.json({ message: 'Invalid file type.' }, { status: 400 })
   }
 
-  const maxAudioFileSize = 1024 * 1024 * 50 // 50mb
+  const maxAudioFileSize = 1024 * 1024 * 30 // 30mb
 
   if (audioFile.size > maxAudioFileSize) {
     return Response.json(
@@ -50,7 +50,9 @@ export async function POST(request: Request) {
 
       recognizer.canceled = (sender, event) => {
         if (event.reason === sdk.CancellationReason.Error) {
-          reject(new Error('Recognition canceled.'))
+          reject(
+            new Error(`Recognition canceled. Details: ${event.errorDetails}`),
+          )
         }
 
         recognizer.stopContinuousRecognitionAsync()
@@ -73,7 +75,8 @@ export async function POST(request: Request) {
     })
 
     return Response.json(transcription)
-  } catch (error) {
-    return Response.json({ error }, { status: 400 })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    return Response.json({ error: error.message }, { status: 400 })
   }
 }
