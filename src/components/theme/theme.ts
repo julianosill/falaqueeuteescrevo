@@ -20,7 +20,12 @@ export const createMuiTheme = () =>
       MuiSelect: {
         styleOverrides: {
           root: {
-            fontSize: '0.875rem',
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'var(--mui-palette-text-disabled)',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'var(--mui-palette-primary-main)',
+            },
           },
         },
       },
@@ -42,6 +47,13 @@ export const createMuiTheme = () =>
           bar1Determinate: { borderRadius: 9999 },
           bar1Indeterminate: { borderRadius: 9999 },
           bar2Indeterminate: { borderRadius: 9999 },
+        },
+      },
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            textUnderlineOffset: 2,
+          },
         },
       },
     },

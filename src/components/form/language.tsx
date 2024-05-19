@@ -37,6 +37,7 @@ export function Language() {
         labelId="language-label"
         defaultValue="pt-BR"
         onChange={handleLanguageChange}
+        sx={{ height: '100%' }}
       >
         {options.map(({ value, language }) => (
           <MenuItem key={value} value={value}>
