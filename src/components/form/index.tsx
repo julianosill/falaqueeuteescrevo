@@ -125,16 +125,16 @@ export function Form() {
           variant="body2"
           sx={{ color: 'text.secondary', marginTop: 6, textAlign: 'center' }}
         >
-          Selecione um arquivo de áudio ou vídeo, de até {MAX_DURATION_MINUTES}{' '}
-          minutos, e inicie sua transcrição.
+          Selecione um arquivo de áudio ou vídeo de até {MAX_DURATION_MINUTES}{' '}
+          minutos e inicie sua transcrição.
         </Typography>
       )}
 
       <Stack
         component="form"
         sx={{
-          flexDirection: 'row',
-          gap: 1.5,
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: { xs: 2, sm: 1.5 },
           marginTop: status ? 6 : 4,
           width: '100%',
         }}
@@ -144,13 +144,15 @@ export function Form() {
           <Button
             component="label"
             variant="outlined"
+            tabIndex={-1}
             sx={{
+              borderColor: 'var(--mui-palette-text-disabled)',
               color: 'text.primary',
               flex: '1 1 0%',
               gap: 0.5,
+              paddingY: 1,
               textTransform: 'none',
             }}
-            tabIndex={-1}
             startIcon={
               file ? (
                 <AudioFileOutlined sx={{ color: 'primary.light' }} />
@@ -197,7 +199,7 @@ export function Form() {
           variant="body2"
           sx={{ color: 'text.disabled', marginTop: 1, textAlign: 'center' }}
         >
-          Arquivos suportados: mp3, wav, aac, oog, mp4, avi, webm
+          Arquivos suportados: mp3, wav, aac, oog, mp4, avi, webm.
         </Typography>
       )}
     </>

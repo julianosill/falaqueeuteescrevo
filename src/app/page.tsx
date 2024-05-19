@@ -1,10 +1,10 @@
 import { Container } from '@mui/material'
 
+import { Footer } from '@/components/footer'
 import { Form } from '@/components/form'
 import { Logo } from '@/components/logo'
 import { MainCard } from '@/components/main-card'
 import { Status } from '@/components/status'
-import { ThemeToggle } from '@/components/theme/toggle'
 import { Transcription } from '@/components/transcription'
 
 export default function Home() {
@@ -14,9 +14,9 @@ export default function Home() {
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        gap: 2,
         justifyContent: 'center',
         minHeight: '100vh',
+        padding: 2,
       }}
     >
       <MainCard>
@@ -26,7 +26,7 @@ export default function Home() {
         <Transcription />
       </MainCard>
 
-      <ThemeToggle />
+      <Footer />
     </Container>
   )
 }
