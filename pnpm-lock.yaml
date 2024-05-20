@@ -20,6 +20,9 @@ dependencies:
   '@ffmpeg/util':
     specifier: ^0.12.1
     version: 0.12.1
+  '@formkit/auto-animate':
+    specifier: ^0.8.2
+    version: 0.8.2
   '@mui/icons-material':
     specifier: ^5.15.17
     version: 5.15.17(@mui/material@5.15.17)(@types/react@18.3.1)(react@18.3.1)
@@ -334,6 +337,10 @@ packages:
 
   /@floating-ui/utils@0.2.2:
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
+    dev: false
+
+  /@formkit/auto-animate@0.8.2:
+    resolution: {integrity: sha512-SwPWfeRa5veb1hOIBMdzI+73te5puUBHmqqaF1Bu7FjvxlYSz/kJcZKSa9Cg60zL0uRNeJL2SbRxV6Jp6Q1nFQ==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:

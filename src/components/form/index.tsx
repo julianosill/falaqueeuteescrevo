@@ -16,6 +16,7 @@ import { updateResult, updateStatus } from '@/store/slices/transcription'
 import { convertFileToWav } from '@/utils/convert-file-to-wav'
 import { VALID_TYPES } from '@/utils/valid-file-types'
 import { validateFile } from '@/utils/validate-file'
+import { waitFor } from '@/utils/wait-for'
 
 import { Language } from './language'
 
@@ -51,7 +52,9 @@ export function Form() {
 
     if (!VALID_TYPES.includes(selectedFile.type)) {
       setFile(null)
-      toast.warning('Arquivo inválido, selecione um arquivo de áudio ou vídeo.')
+      toast.warning('Arquivo inválido', {
+        description: 'Selecione um arquivo de áudio ou vídeo.',
+      })
       return
     }
 
@@ -61,7 +64,10 @@ export function Form() {
   async function handleTranscription(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!file) return
-    dispatch(updateResult(null))
+
+    if (status === 'done') {
+      dispatch(updateResult(null))
+    }
 
     const fileValidation = await validateFile(file)
     if (!fileValidation.success) {
@@ -90,25 +96,31 @@ export function Form() {
         console.error(error)
 
         if (transcriptionAttempts > 3) {
-          return toast.error(
-            'Erro na transcrição. Por favor, entre em contato com o administrador do projeto.',
-            { duration: 6000 },
-          )
+          return toast.error('Transcrição falhou', {
+            description:
+              'Por favor, entre em contato com o administrador do projeto.',
+            duration: 6000,
+          })
         }
 
         if (response.status === 504) {
-          return toast.error(
-            'O tempo de transcrição ultrapassou o limite. Por favor, envie um arquivo com duração menor.',
-            { duration: 6000 },
-          )
+          return toast.error('Transcrição falhou', {
+            description:
+              'O tempo de transcrição ultrapassou o limite. Por favor, envie um arquivo com duração menor.',
+            duration: 8000,
+          })
         }
 
-        return toast.error('A transcrição falhou. Por favor, tente novamente.')
+        return toast.error('Transcrição falhou', {
+          description: 'Por favor, tente novamente.',
+        })
       }
+
+      dispatch(updateStatus('done'))
+      await waitFor(200)
 
       const result = await response.json()
       dispatch(updateResult(result.transcription))
-      dispatch(updateStatus('done'))
       transcriptionAttempts = 0
     } catch (error) {
       toast.error('Não foi possível iniciar a transcrição. Tente novamente.')
@@ -145,6 +157,7 @@ export function Form() {
             component="label"
             variant="outlined"
             tabIndex={-1}
+            disabled={status !== null && status !== 'done'}
             sx={{
               borderColor: 'var(--mui-palette-text-disabled)',
               color: 'text.primary',
@@ -182,7 +195,7 @@ export function Form() {
           </Button>
         </Tooltip>
 
-        {file && <Language />}
+        {file && <Language disabled={status !== null && status !== 'done'} />}
 
         <Button
           type="submit"
@@ -197,7 +210,12 @@ export function Form() {
       {!file && (
         <Typography
           variant="body2"
-          sx={{ color: 'text.disabled', marginTop: 1, textAlign: 'center' }}
+          sx={{
+            color: 'text.disabled',
+            marginTop: 1,
+            textAlign: 'center',
+            width: '100%',
+          }}
         >
           Arquivos suportados: mp3, wav, aac, oog, mp4, avi, webm.
         </Typography>
