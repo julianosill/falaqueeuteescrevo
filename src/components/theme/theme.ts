@@ -26,6 +26,9 @@ export const createMuiTheme = () =>
             '&:hover .MuiOutlinedInput-notchedOutline': {
               borderColor: 'var(--mui-palette-primary-main)',
             },
+            '&.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'var(--mui-palette-action-disabledBackground)',
+            },
           },
         },
       },
