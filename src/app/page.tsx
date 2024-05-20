@@ -1,4 +1,4 @@
-import { Container } from '@mui/material'
+import { Box, Container } from '@mui/material'
 
 import { Footer } from '@/components/footer'
 import { Form } from '@/components/form'
@@ -20,7 +20,9 @@ export default function Home() {
       }}
     >
       <MainCard>
-        <Logo style={{ width: '100%' }} />
+        <Box sx={{ maxWidth: '180px' }}>
+          <Logo style={{ height: 'auto', width: '100%' }} />
+        </Box>
         <Form />
         <Status />
         <Transcription />
