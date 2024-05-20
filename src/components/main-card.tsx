@@ -1,14 +1,16 @@
 'use client'
 
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Card, type CardProps } from '@mui/material'
 
-import { useAppSelector } from '@/store'
+import { customAnimation } from '@/libs/auto-animate'
 
 export function MainCard({ children, ...props }: CardProps) {
-  const status = useAppSelector((state) => state.transcription.status)
+  const [parent] = useAutoAnimate(customAnimation)
 
   return (
     <Card
+      ref={parent}
       component="main"
       variant="outlined"
       sx={{
@@ -16,7 +18,7 @@ export function MainCard({ children, ...props }: CardProps) {
         borderRadius: 4,
         display: 'flex',
         flexDirection: 'column',
-        maxWidth: status === 'done' ? '960px' : '720px',
+        maxWidth: '720px',
         padding: { xs: 3, sm: 6 },
         width: '100%',
       }}
