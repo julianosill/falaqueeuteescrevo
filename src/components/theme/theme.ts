@@ -21,13 +21,14 @@ export const createMuiTheme = () =>
         styleOverrides: {
           root: {
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'var(--mui-palette-text-disabled)',
+              border:
+                '1px solid rgba(var(--mui-palette-primary-mainChannel) / 0.5)',
             },
             '&:hover .MuiOutlinedInput-notchedOutline': {
               borderColor: 'var(--mui-palette-primary-main)',
             },
             '&.Mui-disabled .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'var(--mui-palette-action-disabledBackground)',
+              borderColor: 'var(--mui-palette-text-disabled)',
             },
           },
         },
