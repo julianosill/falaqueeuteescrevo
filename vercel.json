@@ -1,11 +1,4 @@
 {
-  "git": {
-    "deploymentEnabled": {
-      "*": false,
-      "main": true,
-      "dev": true
-    }
-  },
   "functions": {
     "app/api/transcribe/*.ts": {
       "maxDuration": 60

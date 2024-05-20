@@ -9,6 +9,10 @@ import { useDispatch } from 'react-redux'
 
 import { updateLanguage } from '@/store/slices/transcription'
 
+interface LanguageProps {
+  disabled?: boolean
+}
+
 const options = [
   { value: 'de-DE', language: 'Alemão (DE)' },
   { value: 'ko-KR', language: 'Coreano (KR)' },
@@ -22,7 +26,7 @@ const options = [
   { value: 'pt-BR', language: 'Português (BR)' },
 ]
 
-export function Language() {
+export function Language({ disabled }: LanguageProps) {
   const dispatch = useDispatch()
 
   function handleLanguageChange(e: SelectChangeEvent) {
@@ -37,6 +41,7 @@ export function Language() {
         labelId="language-label"
         defaultValue="pt-BR"
         onChange={handleLanguageChange}
+        disabled={disabled}
         sx={{ height: '100%' }}
       >
         {options.map(({ value, language }) => (
