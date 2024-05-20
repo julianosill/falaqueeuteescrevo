@@ -5,11 +5,13 @@ import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
 
 import MuiThemeRegistry from '@/components/theme/registry'
+import { env } from '@/env'
 import { StoreProvider } from '@/store/store-provider'
 
 export const metadata: Metadata = {
   title: 'Fala que eu te escrevo',
   description: 'Transcreva seus áudios e vídeos de forma prática e rápida.',
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_BASE_URL),
 }
 
 export default function RootLayout({
