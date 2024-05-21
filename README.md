@@ -18,9 +18,11 @@ Desenvolvida em Next.js 14, utilizando Material UI e FFmpeg para conversão de �
 
 ## Live preview
 
-Acesse a aplicação [neste link](https://falaqueeuteescuto.julianosill.com.br).
+Acesse a aplicação [neste link](https://falaqueeuteescrevo.julianosill.com.br).
 
 *Observação: este projeto está hospedado em serviço gratuito da Vercel. Portanto, a execução está limitada em 60 segundos. Caso a API demore e ultrapasse o tempo limite, a requisição será encerrada e retornará um erro 504.*
+
+https://github.com/julianosill/falaqueeuteescuto/assets/8575672/50b41a79-3a30-4168-85c0-ff297d717bdc
 
 ## Instalação
 
