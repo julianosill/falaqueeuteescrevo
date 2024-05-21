@@ -153,46 +153,51 @@ export function Form() {
         onSubmit={handleTranscription}
       >
         <Tooltip title={file ? file.name : null} placement="top">
-          <Button
-            component="label"
-            variant="outlined"
-            tabIndex={-1}
-            disabled={status !== null && status !== 'done'}
-            sx={{
-              borderColor: 'var(--mui-palette-text-disabled)',
-              color: 'text.primary',
-              flex: '1 1 0%',
-              gap: 0.5,
-              paddingY: 1,
-              textTransform: 'none',
-            }}
-            startIcon={
-              file ? (
-                <AudioFileOutlined sx={{ color: 'primary.light' }} />
-              ) : (
-                <CloudUploadOutlined sx={{ color: 'primary.light' }} />
-              )
-            }
-          >
-            <Typography
+          <label style={{ flex: '1 1 0%', width: '0%' }}>
+            <Button
+              component="div"
+              variant="outlined"
+              tabIndex={-1}
+              disabled={status !== null && status !== 'done'}
               sx={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
+                color: 'text.primary',
+                gap: 0.5,
+                paddingY: 1,
+                textTransform: 'none',
+                width: '100%',
               }}
+              startIcon={
+                file ? (
+                  <AudioFileOutlined sx={{ color: 'primary.light' }} />
+                ) : (
+                  <CloudUploadOutlined sx={{ color: 'primary.light' }} />
+                )
+              }
             >
-              {file ? file.name : 'Selecionar arquivo'}
-            </Typography>
-            {fileSize && (
               <Typography
-                variant="body2"
-                sx={{ color: 'text.disabled', lineHeight: 1, marginLeft: 0.5 }}
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
               >
-                {fileSize}
+                {file ? file.name : 'Selecionar arquivo'}
               </Typography>
-            )}
-            <HiddenInput type="file" onChange={handleFileSelected} />
-          </Button>
+              {fileSize && (
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'text.disabled',
+                    lineHeight: 1,
+                    marginLeft: 0.5,
+                  }}
+                >
+                  {fileSize}
+                </Typography>
+              )}
+              <HiddenInput type="file" onChange={handleFileSelected} />
+            </Button>
+          </label>
         </Tooltip>
 
         {file && <Language disabled={status !== null && status !== 'done'} />}
