@@ -5,7 +5,7 @@ import {
   CloudUploadOutlined,
   GraphicEq,
 } from '@mui/icons-material'
-import { Button, Stack, styled, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Stack, styled, Tooltip, Typography } from '@mui/material'
 import { type ChangeEvent, type FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -153,7 +153,10 @@ export function Form() {
         onSubmit={handleTranscription}
       >
         <Tooltip title={file ? file.name : null} placement="top">
-          <label style={{ flex: '1 1 0%', width: '0%' }}>
+          <Box
+            component="label"
+            sx={{ flex: '1 1 0%', width: { xs: '100%', md: '0%' } }}
+          >
             <Button
               component="div"
               variant="outlined"
@@ -197,7 +200,7 @@ export function Form() {
               )}
               <HiddenInput type="file" onChange={handleFileSelected} />
             </Button>
-          </label>
+          </Box>
         </Tooltip>
 
         {file && <Language disabled={status !== null && status !== 'done'} />}
